@@ -30,7 +30,7 @@ class Payment(BaseModel):
 class Services(BaseModel):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    logo = models.URLField()
+    logo = models.URLField(max_length=5000)
 
     class Meta:
         db_table = 'services'

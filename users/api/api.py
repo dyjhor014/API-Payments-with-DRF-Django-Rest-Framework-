@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view
 from users.models import User
 from users.api.serializers import UserSerializer, UserListSerializer
 
+#USERS API
 @api_view(['GET','POST'])
 def user_api_view(request):
     #List
