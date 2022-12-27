@@ -29,6 +29,8 @@ BASE_APPS = [
 
 LOCAL_APPS = [
     'users.apps.UsersConfig',
+    'payments',
+    'base'
 ]
 
 THIRD_APPS = [
