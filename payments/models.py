@@ -55,10 +55,13 @@ class Payment_user(BaseModel):
         return self.user_id
 
 
-class Expired_payments(models.Model):
+class Expired_payments(BaseModel):
     payment_user_id = models.ForeignKey(
         Payment_user, on_delete=models.CASCADE)
     penalty_fee_amount = models.FloatField()
 
     class Meta:
         db_table = 'expired_payments'
+
+    def __str__(self):
+        return self.payment_user_id
