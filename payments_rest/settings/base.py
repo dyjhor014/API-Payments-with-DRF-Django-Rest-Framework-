@@ -34,14 +34,28 @@ LOCAL_APPS = [
 ]
 
 THIRD_APPS = [
+    'corsheaders',
     'rest_framework',
+    'rest_framework_simplejwt',
     'simple_history',
     'drf_yasg',
 ]
 
 INSTALLED_APPS = BASE_APPS + LOCAL_APPS + THIRD_APPS
 
+SWAGGER_SETTINGS = {
+    'DOC_EXPANSION': 'none'
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -90,7 +104,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000"
+]
 
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:3000"
+]
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 

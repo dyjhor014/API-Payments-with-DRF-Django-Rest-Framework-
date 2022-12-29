@@ -14,6 +14,13 @@ class ServiceViewSet(viewsets.GenericViewSet):
         return self.get_serializer().Meta.model.objects.filter(id=pk, state = True).first()
     
     def list(self, request):
+        """ 
+        Lista todos los servicios
+
+        name --> Nombre del servicio
+        description --> Descripción del servicio
+        logo --> Logotipo del servicio
+        """
         service_serializer = self.get_serializer(self.get_queryset(), many = True)
         return Response(service_serializer.data, status=status.HTTP_200_OK)
 
@@ -54,7 +61,7 @@ class PaymentUserViewSet(viewsets.ModelViewSet):
             payment_user.state = False
             payment_user.save()
             return Response({'message': 'Pago eliminado correctamente!'}, status=status.HTTP_200_OK)
-        return Response({'message':'No existe un servicio con esos datos'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'message':'No existe un pago con esos datos'}, status=status.HTTP_400_BAD_REQUEST)
  
 class ExpiredPaymentViewSet(viewsets.ModelViewSet):
     serializer_class = ExpiredPaymentSerializer
