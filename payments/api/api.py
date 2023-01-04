@@ -62,10 +62,10 @@ class PaymentUserViewSet(viewsets.ModelViewSet):
             payment_user.save()
             return Response({'message': 'Pago eliminado correctamente!'}, status=status.HTTP_200_OK)
         return Response({'message':'No existe un pago con esos datos'}, status=status.HTTP_400_BAD_REQUEST)
- 
+        
 class ExpiredPaymentViewSet(viewsets.ModelViewSet):
     serializer_class = ExpiredPaymentSerializer
-    def get_queryset(self, pk=None):
-        if pk is None:
-            return self.get_serializer().Meta.model.objects.filter(state=True)
-        return self.get_serializer().Meta.model.objects.filter(id=pk, state = True).first()
+
+    def get_queryset(self):
+        queryset = Expired_payments.objects.all()
+        return queryset
