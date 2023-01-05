@@ -47,6 +47,8 @@ class Payment_user(BaseModel):
     amount = models.FloatField()
     payment_date = models.DateField(null=True)
     expiration_date = models.DateField(null=True)
+    payment_state = models.BooleanField('Estado_pago', default=False)
+    penalty = models.FloatField(null=True)
 
     class Meta:
         db_table = 'payment_user'

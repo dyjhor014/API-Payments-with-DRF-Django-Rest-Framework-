@@ -39,12 +39,22 @@ class PaymentUserViewSet(viewsets.ModelViewSet):
         payment_user = self.serializer_class(data=request.data)
         if payment_user.is_valid():
             payment_user.save()
+            id_payment = payment_user.data['id']
+            amount = payment_user.data['amount']
+            #Extraemos fechas para el cálculo de los pagos vencidos
             payment_date = datetime.strptime(payment_user.data["payment_date"], '%Y-%m-%d').date()
             expiration_date = datetime.strptime(payment_user.data["expiration_date"], '%Y-%m-%d').date()
-            res = int(payment_date-expiration_date) / timedelta(days=1)
-            if res > 0:
-                print("Pago expirado")
-            return Response({'message': 'Pago creado correctamente!'}, status=status.HTTP_201_CREATED)
+            days = int((payment_date-expiration_date) / timedelta(days=1))
+            #Si la fecha diferencia de fecha de pago con expiración es mayor a cero entonces guardamos el pago
+            #en la tabla de pagos expirados y le devolvemos un mensaje
+            overdue_payment = False
+            if days > 0:
+                expired_payment = Payment_user.objects.get(pk=id_payment)
+                expired_payment.payment_state = True
+                expired_payment.penalty = (5 * amount/100)*days
+                expired_payment.save()
+                overdue_payment = True
+            return Response({'message': f'Pago creado correctamente!','overdue_payment': overdue_payment}, status=status.HTTP_201_CREATED)
         return Response(payment_user.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def update(self, request, pk = None):
@@ -62,10 +72,3 @@ class PaymentUserViewSet(viewsets.ModelViewSet):
             payment_user.save()
             return Response({'message': 'Pago eliminado correctamente!'}, status=status.HTTP_200_OK)
         return Response({'message':'No existe un pago con esos datos'}, status=status.HTTP_400_BAD_REQUEST)
-        
-class ExpiredPaymentViewSet(viewsets.ModelViewSet):
-    serializer_class = ExpiredPaymentSerializer
-
-    def get_queryset(self):
-        queryset = Expired_payments.objects.all()
-        return queryset
